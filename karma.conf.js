@@ -1,40 +1,24 @@
+const resolve = require('rollup-plugin-node-resolve');
+const commonjs = require('rollup-plugin-commonjs');
+
 module.exports = function(config) {
   config.set({
     browsers: ['ChromeHeadless'],
     frameworks: ['qunit'],
-    files: [
-      'src/**/*.js',
-      'test/**/*.js',
-      'index.html'
-    ],
+    files: ['src/**/*.js', 'test/**/*.js', 'test/index.html'],
     crossOriginAttribute: false, // otherwise can't load remote scripts
 
     preprocessors: {
-      'index.html': ['html2js'],
-      'src/*.js': ['webpack'],
-      'test/*.js': ['webpack', 'sourcemap']
+      'test/index.html': ['html2js'],
+      'src/*.js': ['rollup'],
+      'test/*.js': ['rollup', 'sourcemap']
     },
 
-    webpack: {
-      devtool: 'inline-source-map',
-      module: {
-        rules: [
-          {
-            test: /\.js$/,
-            exclude: /node_modules/,
-            use: {
-              loader: 'babel-loader',
-              options: {
-                presets: ['env']
-              }
-            }
-          }
-        ]
-      }
-    },
-
-    webpackMiddleware: {
-      noInfo: true
+    rollupPreprocessor: {
+      plugins: [resolve(), commonjs()],
+      format: 'iife',
+      name: 'StudioApp',
+      sourcemap: 'inline'
     },
 
     html2JsPreprocessor: {
