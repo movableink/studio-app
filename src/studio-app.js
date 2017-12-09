@@ -63,14 +63,15 @@ export default class StudioApp {
       let missingData = false;
 
       const replaced = tag.text.replace(regex, function(match, tokenName) {
+        const value = data[tokenName];
         if (
-          typeof data[tokenName] !== 'undefined' &&
+          typeof value !== 'undefined' &&
           data[tokenName] !== null &&
-          !isNaN(data[tokenName])
+          !(typeof value === 'number' && isNaN(value))
         ) {
-          return data[tokenName];
+          return value;
         } else {
-          console.log('missing for ' + tokenName);
+          console.log('missing replacement value for ' + tokenName);
           missingData = true;
           return '';
         }
