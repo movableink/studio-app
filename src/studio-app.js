@@ -1,4 +1,8 @@
 import CD from 'cropduster';
+import Promiscuous from 'promiscuous';
+
+// overwrite native Promises with capturama-friendly promises
+window.Promise = Promiscuous;
 
 export default class StudioApp {
   /**

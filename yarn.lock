@@ -1457,6 +1457,10 @@ progress@^1.1.8:
   version "1.1.8"
   resolved "https://registry.yarnpkg.com/progress/-/progress-1.1.8.tgz#e260c78f6161cdd9b0e56cc3e0a85de17c7a57be"
 
+"promiscuous@https://github.com/movableink/promiscuous#mn/capturama-compatible":
+  version "0.7.1"
+  resolved "https://github.com/movableink/promiscuous#6468d7809eea4e04c87b421c86b213d5c15cde07"
+
 punycode@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-1.4.1.tgz#c0d5a63b2718800ad8e1eb0fa5269c84dd41845e"

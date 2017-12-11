@@ -27,6 +27,7 @@
     "karma-qunit": "^1.2.1",
     "karma-rollup-preprocessor": "^5.0.1",
     "karma-sourcemap-loader": "^0.3.7",
+    "promiscuous": "https://github.com/movableink/promiscuous#mn/capturama-compatible",
     "qunitjs": "^2.4.1",
     "rollup": "^0.51.5",
     "rollup-plugin-commonjs": "^8.2.6",
