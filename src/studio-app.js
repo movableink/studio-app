@@ -192,7 +192,7 @@ export default class StudioApp {
     const imageUrls = urlsFromBackgrounds.concat(urlsFromImgTags);
 
     imageUrls.forEach(image => {
-      CD.waitForAsset(v.src);
+      CD.waitForAsset(image);
     });
   }
 
