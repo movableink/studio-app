@@ -33,4 +33,4 @@ app.render();
 
 ## License
 
-Copyright 2017 Movable, Inc. All rights reserved.
+Copyright 2018 Movable, Inc. All rights reserved.
