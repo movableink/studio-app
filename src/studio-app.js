@@ -71,7 +71,7 @@ export default class StudioApp {
         ) {
           return value;
         } else {
-          console.log('missing replacement value for ' + tokenName);
+          CD.log('missing replacement value for ' + tokenName);
           missingData = true;
           return '';
         }
