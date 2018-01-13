@@ -182,7 +182,9 @@ export default class StudioApp {
    */
   waitForImageAssets() {
     const imageEls = Array.from(document.querySelectorAll('img'));
-    const tagsWithBackgrounds = this.allTags.filter(t => t.backgroundImage);
+    const tagsWithBackgrounds = this.allTags.filter(t => {
+      return t.backgroundImage && t.backgroundImage !== 'none';
+    });
 
     const urlsFromBackgrounds = tagsWithBackgrounds.map(t => t.backgroundImage);
     const urlsFromImgTags = imageEls.map(el => el.src);
