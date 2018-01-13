@@ -194,6 +194,8 @@ export default class StudioApp {
     imageUrls.forEach(image => {
       CD.waitForAsset(image);
     });
+
+    return imageUrls;
   }
 
   // Private Methods
