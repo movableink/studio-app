@@ -128,6 +128,11 @@ export default class StudioApp {
    * Step down a tag's font size until the tag fits onto a single line.
    */
   resizeTag(tag) {
+    if (!tag.element) {
+      CD.log('resize tag is missing element');
+      return;
+    }
+
     const minimumSize = tag.minimumFontSize || 0;
     const startingFontSize = tag.fontSize;
     let ratio = this.overflowRatio(tag.element);
