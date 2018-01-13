@@ -21,8 +21,6 @@ QUnit.test('it instantiates a studio app', function(assert) {
   assert.equal(app.tags.length, 11);
 });
 
-// TODO:
-
 QUnit.test('.param with required value missing', function(assert) {
   mockParams({ foo: null });
 
