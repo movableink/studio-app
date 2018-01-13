@@ -90,7 +90,7 @@ export default class StudioApp {
    * Update a tag to show its fallback text.
    */
   showFallbackText(tags) {
-    if (typeof tags === 'object') {
+    if (typeof tags === 'object' && !tags.pop) {
       tags = [tags];
     }
 
