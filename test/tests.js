@@ -247,3 +247,73 @@ QUnit.test('.waitForImageAssets with img tags', function(assert) {
   assert.equal(images.length, 1);
   assert.expect(2);
 });
+
+QUnit.test('.container', function(assert) {
+  const app = new StudioApp();
+  assert.equal(app.container.id, 'mi_size_container');
+});
+
+QUnit.test('.innerBoundingBox', function(assert) {
+  const app = new StudioApp();
+  assert.equal(app.innerBoundingBox().top, 111, 'has correct top');
+  assert.equal(app.innerBoundingBox().left, 62, 'has correct left');
+  assert.equal(app.innerBoundingBox().bottom, 171, 'has correct bottom');
+  assert.equal(app.innerBoundingBox().right, 338, 'has correct right');
+  assert.equal(app.innerBoundingBox().width, 276, 'has correct width');
+  assert.equal(app.innerBoundingBox().height, 60, 'has correct height');
+});
+
+QUnit.test('.innerBoundingBox with args', function(assert) {
+  const app = new StudioApp();
+  const tags = app.tags.slice(0, 1);
+  const tag = tags[0];
+  assert.equal(app.innerBoundingBox(tags).top, tag.top, 'has correct top');
+  assert.equal(app.innerBoundingBox(tags).left, tag.left, 'has correct left');
+  assert.equal(app.innerBoundingBox(tags).bottom, 171, 'has correct bottom');
+  assert.equal(app.innerBoundingBox(tags).right, 338, 'has correct right');
+  assert.equal(app.innerBoundingBox(tags).width, tag.width, 'has correct width');
+  assert.equal(app.innerBoundingBox(tags).height, tag.height, 'has correct height');
+});
+
+QUnit.test('.innerBoundingBox with empty array', function(assert) {
+  const app = new StudioApp();
+  const tags = [];
+  assert.equal(app.innerBoundingBox(tags).top, 0, 'has correct top');
+  assert.equal(app.innerBoundingBox(tags).left, 0, 'has correct left');
+  assert.equal(app.innerBoundingBox(tags).bottom, 0, 'has correct bottom');
+  assert.equal(app.innerBoundingBox(tags).right, 0, 'has correct right');
+  assert.equal(app.innerBoundingBox(tags).width, 0, 'has correct width');
+  assert.equal(app.innerBoundingBox(tags).height, 0, 'has correct height');
+});
+
+QUnit.test('.fitToTags', function(assert) {
+  const app = new StudioApp();
+  app.fitToTags();
+
+  assert.equal(app.container.style.width, '276px', 'resizes the width');
+  assert.equal(app.container.style.height, '60px', 'resizes the height');
+});
+
+QUnit.test('.fitToTags with padding', function(assert) {
+  const app = new StudioApp();
+  app.fitToTags({ top: 5, bottom: 3, left: 10, right: 44 });
+
+  assert.equal(app.container.style.width, '330px', 'resizes the width');
+  assert.equal(app.container.style.height, '68px', 'resizes the height');
+});
+
+QUnit.test('.sliceOutTag', function(assert) {
+  const app = new StudioApp();
+  const hours = app.tags.find(t => t.tool.name === 'hours');
+  assert.equal(hours.top, 131, 'hours element starts at 131');
+  const text = app.tags.filter(t => t.tool.name === 'text');
+
+  text.forEach(t => {
+    app.sliceOutTag(t);
+  });
+
+  assert.equal(hours.top, 111, 'moves the hours element up 20px');
+
+  assert.notOk(app.tags.find(t => t.tool.name === 'text'), 'removes text tags from tag list');
+  assert.notOk(app.allTags.find(t => t.tool.name === 'text'), 'removes text tags from all tags');
+});
