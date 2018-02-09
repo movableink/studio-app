@@ -200,8 +200,11 @@ export default class StudioApp {
     return imageUrls;
   }
 
-  // Removes a tag from the document and everything located completely
-  // below it is shifted up, vertically
+  /**
+   * Remove a tag from the document, find all tags located
+   * completely below it, and shift them all up, vertically. Sort
+   * of a "splice()" for tags.
+   */
   sliceOutTag(tag) {
     const height = tag.height;
     const tagsBelow = this.tags.filter(t => t.top >= tag.top + height);
@@ -216,8 +219,11 @@ export default class StudioApp {
     this.allTags = this.allTags.filter(t => t !== tag);
   }
 
-  // resizes the container to just bound around the tag elements
-  // inside it
+  /**
+   * Resize the container to fit exactly around the tag elements
+   * inside it. Can be passed padding. Note that it currently does
+   * not trim extra space on the top or left of the container.
+   */
   fitToTags(padding = {}) {
     const boundingBox = this.innerBoundingBox();
 
@@ -230,7 +236,9 @@ export default class StudioApp {
     this.container.style.height = height + 'px';
   }
 
-  // finds a bounding box of all tags
+  /**
+   * Find a bounding box of the given tags.
+   */
   innerBoundingBox(tags = this.tags) {
     let top = Infinity;
     let left = Infinity;
@@ -252,13 +260,16 @@ export default class StudioApp {
       right = Math.max(right, boundingBox.right - containerLeft);
     });
 
+    const width = right - left;
+    const height = bottom - top;
+
     return {
       top,
       left,
       right,
       bottom,
-      width: right - left,
-      height: bottom - top
+      width,
+      height
     };
   }
 
