@@ -185,20 +185,16 @@ export default class StudioApp {
       ...document.querySelectorAll('img')
     ].map(({ src }) => src);
 
-    const backgroundImageUrlsFromDom = [
+    const backgroundImageUrls = [
       ...document.querySelectorAll('[style*="background-image"]')
     ].map(({ style }) => {
       const { backgroundImage } = style;
       return backgroundImage.replace(/^url\((.*)\)$/g, '$1');
     });
 
-    const backgroundImageUrlsFromTags = this.allTags.map(
-      ({ backgroundImage }) => backgroundImage);
-
     const imageUrls = [
       ...imageSrcUrls,
-      ...backgroundImageUrlsFromDom,
-      ...backgroundImageUrlsFromTags
+      ...backgroundImageUrls
     ].filter(url => url && url !== 'none');
 
     imageUrls.forEach(image => {
