@@ -216,12 +216,14 @@ QUnit.test('.waitForImageAssets with no images', function(assert) {
 });
 
 QUnit.test('.waitForImageAssets with background images', function(assert) {
+  const backgroundImage = 'http://example.com/image.png';
+
   const app = new StudioApp();
-  const tag = app.tags.find(t => t.text === '[hours]');
-  tag.backgroundImage = 'http://example.com/image.png';
+  const { element } = app.tags.find(t => t.text === '[hours]');
+  element.style.setProperty('background-image', `url("${backgroundImage}")`);
 
   CD.log = function(msg) {
-    assert.equal(msg, 'Wait for asset: http://example.com/image.png');
+    assert.equal(msg, `Wait for asset: "${backgroundImage}"`);
   };
 
   const images = app.waitForImageAssets();
