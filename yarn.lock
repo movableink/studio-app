@@ -352,9 +352,9 @@ core-util-is@1.0.2, core-util-is@~1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/core-util-is/-/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
 
-cropduster@^5.4.0:
-  version "5.4.0"
-  resolved "https://registry.yarnpkg.com/cropduster/-/cropduster-5.4.0.tgz#359cd10710dfcb05bbfbaef4a5ee257d7b0bb82a"
+cropduster@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/cropduster/-/cropduster-6.0.0.tgz#bb50162e1236ab05f6600aa7ae801c4d7be978af"
 
 cryptiles@2.x.x:
   version "2.0.5"
