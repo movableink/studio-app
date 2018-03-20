@@ -1,4 +1,5 @@
 import CD from 'cropduster';
+import containsBadWords from './lib/contains-bad-words.js'
 
 export default class StudioApp {
   /**
@@ -56,13 +57,15 @@ export default class StudioApp {
    * any instances of [bracketed] text (aka tokens) with the value of the
    * given `data` object
    */
-  replaceTokens(tags, data) {
+  replaceTokens(tags, data, options = {}) {
+    const { filterBadWords } = options;
+
     tags.filter(t => t.text).forEach(tag => {
       const element = tag.element;
       const regex = /\[([\w\s.-]+)\]/g;
       let missingData = false;
 
-      const replaced = tag.text.replace(regex, function(match, tokenName) {
+      tag.text.replace(regex, function(match, tokenName) {
         const value = data[tokenName];
         if (
           typeof value !== 'undefined' &&
@@ -82,6 +85,23 @@ export default class StudioApp {
       } else {
         tag.text = replaced;
         tag.element.innerHTML = replaced;
+      }
+    });
+
+    if (filterBadWords) {
+      StudioApp.filterBadWords(tags);
+    }
+  }
+
+  /**
+   * Search for explicit language in tags and show their fallback text when
+   * detected.
+   */
+  static filterBadWords(tags) {
+    tags.forEach(tag => {
+      const { innerHTML } = tag.element;
+      if (containsBadWords(innerHTML)) {
+        this.showFallbackText(tag);
       }
     });
   }

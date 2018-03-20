@@ -18,7 +18,8 @@
     "test": "node_modules/.bin/karma start --single-run"
   },
   "dependencies": {
-    "cropduster": "^4.1.0"
+    "cropduster": "^4.1.0",
+    "badwords-list": "^1.0.0"
   },
   "devDependencies": {
     "karma": "^1.7.1",
