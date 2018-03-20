@@ -1,12 +1,13 @@
 import StudioApp from '../src/studio-app';
 import CD from 'cropduster';
 import { wysiwygContent, mockParams, mockOptions } from './helper';
+const { module, test } = QUnit;
 
 const container = document.createElement('div');
 container.classNames = 'container';
 document.body.appendChild(container);
 
-QUnit.module('StudioApp', {
+module('StudioApp', {
   beforeEach: function(assert) {
     CD.log = function() {};
     container.innerHTML = wysiwygContent();
@@ -16,12 +17,12 @@ QUnit.module('StudioApp', {
   }
 });
 
-QUnit.test('it instantiates a studio app', function(assert) {
+test('it instantiates a studio app', function(assert) {
   const app = new StudioApp();
   assert.equal(app.tags.length, 11);
 });
 
-QUnit.test('.param with required value missing', function(assert) {
+test('.param with required value missing', function(assert) {
   mockParams({ foo: null });
 
   const app = new StudioApp();
@@ -30,28 +31,28 @@ QUnit.test('.param with required value missing', function(assert) {
   }, /missing required query param: foo/);
 });
 
-QUnit.test('.param with required value present', function(assert) {
+test('.param with required value present', function(assert) {
   mockParams({ foo: 'bar' });
 
   const app = new StudioApp();
   assert.equal(app.param('foo', { required: true }), 'bar', 'returns the param');
 });
 
-QUnit.test('.param with default value', function(assert) {
+test('.param with default value', function(assert) {
   mockParams({ foo: null });
 
   const app = new StudioApp();
   assert.equal(app.param('foo', { defaultValue: 'bar' }), 'bar', 'returns the default');
 });
 
-QUnit.test('.param with default value replacing empty string', function(assert) {
+test('.param with default value replacing empty string', function(assert) {
   mockParams({ foo: '' });
 
   const app = new StudioApp();
   assert.equal(app.param('foo', { defaultValue: 'bar' }), 'bar', 'returns the default');
 });
 
-QUnit.test('.param not required and no default', function(assert) {
+test('.param not required and no default', function(assert) {
   const app = new StudioApp();
 
   assert.throws(function() {
@@ -59,20 +60,20 @@ QUnit.test('.param not required and no default', function(assert) {
   }, /parameters need a default/);
 });
 
-QUnit.test('constructor setting tags', function(assert) {
+test('constructor setting tags', function(assert) {
   const app = new StudioApp();
   assert.equal(app.tags.length, 11);
   assert.equal(app.tags[0].text, '[seconds]');
   assert.equal(app.tags[0].element.innerText, '[seconds]');
 });
 
-QUnit.test('constructor setting options', function(assert) {
+test('constructor setting options', function(assert) {
   mockOptions({ foo: 'bar' });
   const app = new StudioApp();
   assert.equal(app.options.foo, 'bar');
 });
 
-QUnit.test('.error', function(assert) {
+test('.error', function(assert) {
   CD.log = function(err) {
     assert.equal(err, 'Capturama error: something went wrong');
   };
@@ -85,7 +86,7 @@ QUnit.test('.error', function(assert) {
   assert.expect(2);
 });
 
-QUnit.test('.replaceTokens when tag has valid tokens', function(assert) {
+test('.replaceTokens when tag has valid tokens', function(assert) {
   const app = new StudioApp();
   const tag = app.tags.find(t => t.text === '[seconds]');
 
@@ -94,7 +95,7 @@ QUnit.test('.replaceTokens when tag has valid tokens', function(assert) {
   assert.equal(tag.element.innerHTML, '43');
 });
 
-QUnit.test('.replaceTokens when tag has no tokens', function(assert) {
+test('.replaceTokens when tag has no tokens', function(assert) {
   const app = new StudioApp();
   const tag = app.tags.find(t => t.text === 'hours');
 
@@ -103,7 +104,7 @@ QUnit.test('.replaceTokens when tag has no tokens', function(assert) {
   assert.equal(tag.element.innerHTML, 'hours', 'leaves the tag alone');
 });
 
-QUnit.test('.replaceTokens when no values match token', function(assert) {
+test('.replaceTokens when no values match token', function(assert) {
   const app = new StudioApp();
   const tag = app.tags.find(t => t.text === '[seconds]');
   tag.fallbackText = '00';
@@ -113,7 +114,7 @@ QUnit.test('.replaceTokens when no values match token', function(assert) {
   assert.equal(tag.element.innerHTML, '00');
 });
 
-QUnit.test('.replaceTokens when tag is missing', function(assert) {
+test('.replaceTokens when tag is missing', function(assert) {
   const app = new StudioApp();
 
   app.replaceTokens([], { hours: '9' });
@@ -121,7 +122,7 @@ QUnit.test('.replaceTokens when tag is missing', function(assert) {
   assert.expect(0);
 });
 
-QUnit.test('.showFallbackText with tags', function(assert) {
+test('.showFallbackText with tags', function(assert) {
   const app = new StudioApp();
   const tag = app.tags.find(t => t.text === '[seconds]');
   tag.fallbackText = '00';
@@ -130,7 +131,7 @@ QUnit.test('.showFallbackText with tags', function(assert) {
   assert.equal(tag.element.innerHTML, '00', "changes tag element's text to the fallback");
 });
 
-QUnit.test('.showFallbackText with a single tag', function(assert) {
+test('.showFallbackText with a single tag', function(assert) {
   const app = new StudioApp();
   const tag = app.tags.find(t => t.text === '[seconds]');
   tag.fallbackText = '00';
@@ -139,7 +140,7 @@ QUnit.test('.showFallbackText with a single tag', function(assert) {
   assert.equal(tag.element.innerHTML, '00', "changes tag element's text to the fallback");
 });
 
-QUnit.test('.showFallbackText with a tag with no fallback text', function(assert) {
+test('.showFallbackText with a tag with no fallback text', function(assert) {
   const app = new StudioApp();
   const tag = app.tags.find(t => t.text === '[seconds]');
   tag.fallbackText = null;
@@ -148,7 +149,7 @@ QUnit.test('.showFallbackText with a tag with no fallback text', function(assert
   assert.equal(tag.element.style.display, 'none', 'hides tag');
 });
 
-QUnit.test('.resizeTag with text that already fits', function(assert) {
+test('.resizeTag with text that already fits', function(assert) {
   const app = new StudioApp();
   const tag = app.tags.find(t => t.text === '[seconds]');
   const originalWidth = tag.element.style.width;
@@ -157,7 +158,7 @@ QUnit.test('.resizeTag with text that already fits', function(assert) {
   assert.equal(tag.element.style.width, originalWidth);
 });
 
-QUnit.test('.resizeTag with text that can be resized down to fit', function(assert) {
+test('.resizeTag with text that can be resized down to fit', function(assert) {
   const app = new StudioApp();
   const tag = app.tags.find(t => t.text === '[hours]');
   tag.element.style.fontSize = '40px';
@@ -169,7 +170,7 @@ QUnit.test('.resizeTag with text that can be resized down to fit', function(asse
   assert.equal(tag.element.innerHTML, 'too long');
 });
 
-QUnit.test('.resizeTag with text that will never fit', function(assert) {
+test('.resizeTag with text that will never fit', function(assert) {
   const app = new StudioApp();
   const tag = app.tags.find(t => t.text === '[hours]');
   tag.element.style.fontSize = '40px';
@@ -183,7 +184,7 @@ QUnit.test('.resizeTag with text that will never fit', function(assert) {
   assert.equal(tag.element.innerHTML, '00');
 });
 
-QUnit.test('.resizeTag with missing element', function(assert) {
+test('.resizeTag with missing element', function(assert) {
   const app = new StudioApp();
   const tag = app.tags.find(t => t.text === '[hours]');
   tag.element = null;
@@ -197,7 +198,7 @@ QUnit.test('.resizeTag with missing element', function(assert) {
   assert.expect(1);
 });
 
-QUnit.test('.overflowRatio', function(assert) {
+test('.overflowRatio', function(assert) {
   const app = new StudioApp();
   const tag = app.tags.find(t => t.text === '[hours]');
   tag.element.style.fontSize = '40px';
@@ -207,7 +208,7 @@ QUnit.test('.overflowRatio', function(assert) {
   assert.ok(app.overflowRatio(tag.element) < 2.5, 'should be roughly 2.36');
 });
 
-QUnit.test('.waitForImageAssets with no images', function(assert) {
+test('.waitForImageAssets with no images', function(assert) {
   const app = new StudioApp();
 
   const images = app.waitForImageAssets();
@@ -215,7 +216,7 @@ QUnit.test('.waitForImageAssets with no images', function(assert) {
   assert.equal(images.length, 0);
 });
 
-QUnit.test('.waitForImageAssets with background images', function(assert) {
+test('.waitForImageAssets with background images', function(assert) {
   const backgroundImage = 'http://example.com/image.png';
 
   const app = new StudioApp();
@@ -232,7 +233,7 @@ QUnit.test('.waitForImageAssets with background images', function(assert) {
   assert.expect(2);
 });
 
-QUnit.test('.waitForImageAssets with img tags', function(assert) {
+test('.waitForImageAssets with img tags', function(assert) {
   const app = new StudioApp();
   const tag = app.tags.find(t => t.text === '[hours]');
 
