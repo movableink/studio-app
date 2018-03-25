@@ -7,9 +7,11 @@ export default class StudioApp {
    * operations. It is highly recommended that you declare all of your params
    * by setting instance variables via `this.thing = this.param(...)` up front.
    */
-  constructor() {
+  constructor(container) {
+    this.container = container || document.querySelector('#mi_size_container');
     this._setOptions();
     this._setTags();
+    this._getBounding();
   }
 
   /**
@@ -204,6 +206,79 @@ export default class StudioApp {
     return imageUrls;
   }
 
+  /**
+   * Remove a tag from the document, find all tags located
+   * completely below it, and shift them all up, vertically. Sort
+   * of a "splice()" for tags.
+   */
+  sliceOutTag(tag) {
+    const height = tag.height;
+    const tagsBelow = this.tags.filter(t => t.top >= tag.top + height);
+    tagsBelow.forEach(t => {
+      t.top -= height;
+      t.element.style.top = t.top + 'px';
+    });
+
+    tag.element.parentNode.removeChild(tag.element);
+
+    this.tags = this.tags.filter(t => t !== tag);
+    this.allTags = this.allTags.filter(t => t !== tag);
+  }
+
+  /**
+   * Resize the container to fit exactly around the tag elements
+   * inside it. Can be passed padding. Note that it currently does
+   * not trim extra space on the top or left of the container.
+   */
+  fitToTags(padding = {}) {
+    const boundingBox = this.innerBoundingBox();
+
+    const width = boundingBox.width + (padding.left || 0) + (padding.right || 0);
+    const height = boundingBox.height + (padding.top || 0) + (padding.bottom || 0);
+
+    this.container.removeAttribute('width');
+    this.container.removeAttribute('height');
+    this.container.style.width = width + 'px';
+    this.container.style.height = height + 'px';
+  }
+
+  /**
+   * Find a bounding box of the given tags.
+   */
+  innerBoundingBox(tags = this.tags) {
+    let top = Infinity;
+    let left = Infinity;
+    let right = -Infinity;
+    let bottom = -Infinity;
+
+    if (!tags.length) {
+      return { top: 0, left: 0, bottom: 0, right: 0, width: 0, height: 0 };
+    }
+
+    const containerTop = this.container.offsetTop;
+    const containerLeft = this.container.offsetLeft;
+
+    tags.map(t => t.element).forEach(el => {
+      const boundingBox = el.getBoundingClientRect();
+      top = Math.min(top, boundingBox.top - containerTop);
+      left = Math.min(left, boundingBox.left - containerLeft);
+      bottom = Math.max(bottom, boundingBox.bottom - containerTop);
+      right = Math.max(right, boundingBox.right - containerLeft);
+    });
+
+    const width = right - left;
+    const height = bottom - top;
+
+    return {
+      top,
+      left,
+      right,
+      bottom,
+      width,
+      height
+    };
+  }
+
   // Private Methods
 
   /**
@@ -256,5 +331,19 @@ export default class StudioApp {
         this.fields[field.name] = field.value;
       });
     }
+  }
+
+  /**
+   * Pre-sets originalBounding and originalPadding, to store the
+   * amount of padding between tags and the sides of the container
+   */
+  _getBounding() {
+    this.originalBounding = this.innerBoundingBox();
+    this.originalPadding = {
+      top: this.originalBounding.top,
+      left: this.originalBounding.left,
+      bottom: this.container.getAttribute('height') - this.originalBounding.height,
+      right: this.container.getAttribute('width') - this.originalBounding.width
+    };
   }
 }
