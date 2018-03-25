@@ -1,4 +1,4 @@
-import StudioApp from '../src/studio-app';
+import StudioApp, { DataSource } from '..';
 import CD from 'cropduster';
 import { wysiwygContent, mockParams, mockOptions } from './helper';
 
@@ -248,4 +248,20 @@ QUnit.test('.waitForImageAssets with img tags', function(assert) {
 
   assert.equal(images.length, 1);
   assert.expect(2);
+});
+
+QUnit.test('instantiating DataSource', function(assert) {
+  const ds = new DataSource({ key: 'foo' });
+  assert.equal(ds.key, 'foo');
+});
+
+QUnit.test('DataSource.getRawData', function(assert) {
+  const done = assert.async();
+  CD.get = path => {
+    assert.equal(path, '/data_sources/foo?name=something&another=something%20else');
+    done();
+  };
+
+  const ds = new DataSource({ key: 'foo' });
+  ds.getRawData({ name: 'something', another: 'something else' });
 });

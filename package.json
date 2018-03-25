@@ -9,7 +9,7 @@
   ],
   "author": "Movable, Inc",
   "license": "SEE LICENSE IN LICENSE.md",
-  "main": "src/studio-app.js",
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/movableink/studio-app"
