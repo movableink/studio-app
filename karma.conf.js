@@ -3,10 +3,17 @@ const commonjs = require('rollup-plugin-commonjs');
 
 module.exports = function(config) {
   config.set({
-    browsers: ['ChromeHeadless'],
+    browsers: ['ChromeHeadlessNoSandbox'],
     frameworks: ['qunit'],
     files: ['src/**/*.js', 'test/**/*.js', 'test/index.html'],
     crossOriginAttribute: false, // otherwise can't load remote scripts
+
+    customLaunchers: {
+      ChromeHeadlessNoSandbox: {
+        base: 'ChromeHeadless',
+        flags: ['--no-sandbox']
+      }
+    },
 
     preprocessors: {
       'test/index.html': ['html2js'],
