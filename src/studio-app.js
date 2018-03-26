@@ -181,21 +181,16 @@ export default class StudioApp {
    * render.
    */
   waitForImageAssets() {
-    const imageSrcUrls = [
-      ...document.querySelectorAll('img')
-    ].map(({ src }) => src);
+    const imageSrcUrls = Array.from(document.querySelectorAll('img')).map(({ src }) => src);
 
-    const backgroundImageUrls = [
-      ...document.querySelectorAll('[style*="background-image"]')
-    ].map(({ style }) => {
+    const backgroundImageUrls = Array.from(
+      document.querySelectorAll('[style*="background-image"]')
+    ).map(({ style }) => {
       const { backgroundImage } = style;
       return backgroundImage.replace(/^url\((.*)\)$/g, '$1');
     });
 
-    const imageUrls = [
-      ...imageSrcUrls,
-      ...backgroundImageUrls
-    ].filter(url => url && url !== 'none');
+    const imageUrls = imageSrcUrls.concat(backgroundImageUrls).filter(url => url && url !== 'none');
 
     imageUrls.forEach(image => {
       CD.waitForAsset(image);
