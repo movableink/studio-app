@@ -9,8 +9,6 @@ export default class StudioApp {
    */
   constructor({ container } = {}) {
     this.container = container || document;
-    this._setOptions();
-    this._setTags();
   }
 
   /**
@@ -200,58 +198,58 @@ export default class StudioApp {
     return imageUrls;
   }
 
-  // Private Methods
+  /**
+   * a flat list of all tags, associated with their DOM elements
+   */
+  get allTags() {
+    const flattenTags = (nestedTags = []) => {
+      return nestedTags.reduce((flattened, tag) => {
+        const { subtags } = tag;
+        return [...flattened, tag, ...flattenTags(subtags)];
+      }, []);
+    };
+
+    return flattenTags(this.tags);
+  }
 
   /**
-   * Pulls the tag list from `.mi-attributes` and associates tags with
-   * their DOM elements. It creates two properties, `this.tags` for the
-   * top-level tags in a tag hierarchy, and `this.allTags` for a flat
-   * list of all tags, including nested ones.
+   * a list of tags with nested subtags, associated with their DOM elements
    */
-  _setTags() {
-    this.tags = [];
-    this.allTags = [];
-    const attributesElement = document.querySelector('.mi-attributes');
+  get tags() {
     const { container } = this;
+    const tags = JSON.parse(document.querySelector('.mi-attributes').textContent);
 
-    const flattenTags = function(tags) {
-      tags.forEach(t => {
-        this.allTags.push(t);
-        if (t.subtags) {
-          flattenTags(t.subtags);
-        }
+    const setElements = tags => {
+      tags.forEach(tag => {
+        tag.element = container.querySelector(`[mi-tag='${tag.id}']`);
+        setElements(tag.subtags || []);
       });
-    }.bind(this);
+    };
 
-    if (attributesElement) {
-      try {
-        this.tags = JSON.parse(attributesElement.textContent);
-        flattenTags(this.tags);
-
-        this.allTags.forEach(tag => {
-          tag.element = container.querySelector(`[mi-tag='${tag.id}']`);
-        });
-      } catch (e) {
-        console.log('Error parsing the attributes element: ' + e);
-      }
-    }
+    setElements(tags);
+    return tags;
   }
 
   /**
    * A safer way to access MI.options, via this.options.
    */
-  _setOptions() {
+  get options() {
     if (typeof MI === 'undefined') {
       window.MI = { options: {} };
     }
-    this.options = MI.options;
+    const { options } = MI;
+    return options;
+  }
 
-    this.fields = {};
+  /**
+   * A safer way to access manifest field values
+   */
+  get fields() {
+    const optionFields = this.options.fields || [];
 
-    if (this.options.fields) {
-      this.options.fields.forEach(field => {
-        this.fields[field.name] = field.value;
-      });
-    }
+    return optionFields.reduce((fields, { name, value }) => {
+      fields[name] = value;
+      return fields;
+    }, {});
   }
 }
