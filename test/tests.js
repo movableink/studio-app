@@ -265,3 +265,37 @@ QUnit.test('DataSource.getRawData', function(assert) {
   const ds = new DataSource({ key: 'foo' });
   ds.getRawData({ name: 'something', another: 'something else' });
 });
+
+QUnit.test('container', function(assert) {
+  assert.ok(
+    new StudioApp().container,
+    document,
+    'it sets the document as the container by default'
+  );
+
+  const container2 = document.querySelector('#mi_size_container').cloneNode(true);
+  container2.setAttribute('id', 'mi_size_container_2');
+  [...container2.children].forEach(child => child.classList.add('container-2'));
+
+  const container1 = document.querySelector('#mi_size_container');
+  [...container1.children].forEach(child => child.classList.add('container-1'));
+
+  container1.append(container2);
+
+  const app1 = new StudioApp({ container: container1 });
+  const app2 = new StudioApp({ container: container2 });
+
+  assert.equal(app1.container, container1, 'it assigns a container');
+  assert.equal(app1.tags.length, 11);
+  assert.ok(
+    app1.tags.every(({ element }) => element.classList.contains('container-1')),
+    'it scopes tags to its container'
+  );
+
+  assert.equal(app2.container, container2, 'it correctly assigns a container');
+  assert.equal(app2.tags.length, 11);
+  assert.ok(
+    app2.tags.every(({ element }) => element.classList.contains('container-2')),
+    'it scopes tags to its container'
+  );
+});

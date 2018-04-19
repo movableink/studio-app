@@ -7,7 +7,8 @@ export default class StudioApp {
    * operations. It is highly recommended that you declare all of your params
    * by setting instance variables via `this.thing = this.param(...)` up front.
    */
-  constructor() {
+  constructor({ container } = {}) {
+    this.container = container || document;
     this._setOptions();
     this._setTags();
   }
@@ -211,6 +212,7 @@ export default class StudioApp {
     this.tags = [];
     this.allTags = [];
     const attributesElement = document.querySelector('.mi-attributes');
+    const { container } = this;
 
     const flattenTags = function(tags) {
       tags.forEach(t => {
@@ -227,7 +229,7 @@ export default class StudioApp {
         flattenTags(this.tags);
 
         this.allTags.forEach(tag => {
-          tag.element = document.querySelector(`[mi-tag='${tag.id}']`);
+          tag.element = container.querySelector(`[mi-tag='${tag.id}']`);
         });
       } catch (e) {
         console.log('Error parsing the attributes element: ' + e);
