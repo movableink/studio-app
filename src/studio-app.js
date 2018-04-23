@@ -202,6 +202,10 @@ export default class StudioApp {
    * a flat list of all tags, associated with their DOM elements
    */
   get allTags() {
+    if (this._allTags) {
+      return this._allTags;
+    }
+
     const flattenTags = (nestedTags = []) => {
       return nestedTags.reduce((flattened, tag) => {
         const { subtags } = tag;
@@ -209,15 +213,19 @@ export default class StudioApp {
       }, []);
     };
 
-    return flattenTags(this.tags);
+    const tags = this._allTags = flattenTags(this.tags);
+    return tags;
   }
 
   /**
    * a list of tags with nested subtags, associated with their DOM elements
    */
   get tags() {
-    const { container } = this;
-    const tags = JSON.parse(document.querySelector('.mi-attributes').textContent);
+    if (this._tags) {
+      return this._tags;
+    }
+
+    const unassignedTags = JSON.parse(document.querySelector('.mi-attributes').textContent);
 
     const setElements = tags => {
       tags.forEach(tag => {
@@ -226,7 +234,7 @@ export default class StudioApp {
       });
     };
 
-    setElements(tags);
+    const tags = this._tags = setElements(unassignedTags);
     return tags;
   }
 
@@ -245,11 +253,17 @@ export default class StudioApp {
    * A safer way to access manifest field values
    */
   get fields() {
+    if (this._fields) {
+      return this._fields;
+    }
+
     const optionFields = this.options.fields || [];
 
-    return optionFields.reduce((fields, { name, value }) => {
+    const fieldsObject = this._fields = optionFields.reduce((fields, { name, value }) => {
       fields[name] = value;
       return fields;
     }, {});
+
+    return fieldsObject;
   }
 }

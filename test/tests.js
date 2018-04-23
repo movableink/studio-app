@@ -21,6 +21,33 @@ QUnit.test('it instantiates a studio app', function(assert) {
   assert.equal(app.tags.length, 11);
 });
 
+QUnit.test('all tags getter', function(assert) {
+  const app = new StudioApp();
+  assert.notOk(app._allTags, '_allTags is not defined in constructor');
+  const allTags = app.allTags;
+  assert.deepEqual(app.allTags, app._allTags, 'calling getter defines _allTags');
+  app._allTags = 'foo';
+  assert.equal(app.allTags, 'foo', 'getter returns _allTags if defined');
+});
+
+QUnit.test('tags getter', function(assert) {
+  const app = new StudioApp();
+  assert.notOk(app._tags, '_tags is not defined in constructor');
+  const tags = app.tags;
+  assert.deepEqual(app.tags, app._tags, 'calling getter defines _tags');
+  app._tags = 'foo';
+  assert.equal(app.tags, 'foo', 'getter returns _tags if defined');
+});
+
+QUnit.test('fields getter', function(assert) {
+  const app = new StudioApp();
+  assert.notOk(app._fields, '_fields is not defined in constructor');
+  const fields = app.fields;
+  assert.deepEqual(app.fields, app._fields, 'calling getter defines _fields');
+  app._fields = 'foo';
+  assert.equal(app.fields, 'foo', 'getter returns _fields if defined');
+});
+
 QUnit.test('.param with required value missing', function(assert) {
   mockParams({ foo: null });
 
