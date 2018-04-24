@@ -225,6 +225,7 @@ export default class StudioApp {
       return this._tags;
     }
 
+    const { container } = this;
     const unassignedTags = JSON.parse(document.querySelector('.mi-attributes').textContent);
 
     const setElements = tags => {
@@ -232,6 +233,8 @@ export default class StudioApp {
         tag.element = container.querySelector(`[mi-tag='${tag.id}']`);
         setElements(tag.subtags || []);
       });
+
+      return tags;
     };
 
     const tags = this._tags = setElements(unassignedTags);
