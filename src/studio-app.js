@@ -139,7 +139,7 @@ export default class StudioApp {
     if (ratio > 1.0) {
       const newFontSize = Math.floor(startingFontSize / ratio);
       if (newFontSize > minimumSize) {
-        tag.element.style['font-size'] = newFontSize + 'px';
+          tag.element.style['font-size'] = newFontSize + 'px';
       } else {
         this.showFallbackText(tag);
       }
@@ -197,6 +197,19 @@ export default class StudioApp {
 
     return imageUrls;
   }
+
+  cropImage(element) {
+    element.style['background-size'] = 'cover';
+    return element;
+  }
+
+  containImage(element) {
+    element.style['background-size'] = 'contain';
+    element.style['background-position'] = 'center';
+    element.style['background-repeat'] = 'no-repeat';
+    return element;
+  }
+
 
   /**
    * a flat list of all tags, associated with their DOM elements
