@@ -139,7 +139,7 @@ export default class StudioApp {
     if (ratio > 1.0) {
       const newFontSize = Math.floor(startingFontSize / ratio);
       if (newFontSize > minimumSize) {
-        tag.element.style['font-size'] = newFontSize + 'px';
+          tag.element.style['font-size'] = newFontSize + 'px';
       } else {
         this.showFallbackText(tag);
       }
@@ -196,6 +196,20 @@ export default class StudioApp {
     });
 
     return imageUrls;
+  }
+
+  cropImage(element) {
+    element.style.setProperty('background-size', 'unset');
+    element.style.setProperty('background-position', 'unset');
+    element.style.setProperty('background-repeat', 'no-repeat');
+    return element;
+  }
+
+  containImage(element) {
+    element.style.setProperty('background-size', 'contain');
+    element.style.setProperty('background-position', 'center');
+    element.style.setProperty('background-repeat', 'no-repeat');
+    return element;
   }
 
   /**

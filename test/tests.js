@@ -326,3 +326,31 @@ QUnit.test('container', function(assert) {
     'it scopes tags to its container'
   );
 });
+
+QUnit.test('.cropImage crops images', function(assert) {
+  const app = new StudioApp();
+  const tag = app.tags[0];
+  const img = new Image();
+  img.src = 'http://example.com/image-tag.png';
+  tag.element.appendChild(img);
+
+  app.cropImage(tag.element)
+
+  assert.equal(tag.element.style.backgroundSize, 'unset');
+  assert.equal(tag.element.style.backgroundPosition, 'unset');
+  assert.equal(tag.element.style.backgroundRepeat, 'no-repeat');
+});
+
+QUnit.test('.containImage shrinks images to fit', function(assert) {
+  const app = new StudioApp();
+  const tag = app.tags[0];
+  const img = new Image();
+  img.src = 'http://example.com/image-tag.png';
+  tag.element.appendChild(img);
+
+  app.containImage(tag.element)
+
+  assert.equal(tag.element.style.backgroundSize, 'contain');
+  assert.equal(tag.element.style.backgroundPosition, 'center center');
+  assert.equal(tag.element.style.backgroundRepeat, 'no-repeat');
+})
