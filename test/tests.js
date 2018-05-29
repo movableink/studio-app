@@ -336,7 +336,9 @@ QUnit.test('.cropImage crops images', function(assert) {
 
   app.cropImage(tag.element)
 
-  assert.equal(tag.element.style.backgroundSize, 'cover');
+  assert.equal(tag.element.style.backgroundSize, 'unset');
+  assert.equal(tag.element.style.backgroundPosition, 'unset');
+  assert.equal(tag.element.style.backgroundRepeat, 'no-repeat');
 });
 
 QUnit.test('.containImage shrinks images to fit', function(assert) {
@@ -349,4 +351,6 @@ QUnit.test('.containImage shrinks images to fit', function(assert) {
   app.containImage(tag.element)
 
   assert.equal(tag.element.style.backgroundSize, 'contain');
+  assert.equal(tag.element.style.backgroundPosition, 'center center');
+  assert.equal(tag.element.style.backgroundRepeat, 'no-repeat');
 })

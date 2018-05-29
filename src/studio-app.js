@@ -199,17 +199,18 @@ export default class StudioApp {
   }
 
   cropImage(element) {
-    element.style['background-size'] = 'cover';
+    element.style.setProperty('background-size', 'unset');
+    element.style.setProperty('background-position', 'unset');
+    element.style.setProperty('background-repeat', 'no-repeat');
     return element;
   }
 
   containImage(element) {
-    element.style['background-size'] = 'contain';
-    element.style['background-position'] = 'center';
-    element.style['background-repeat'] = 'no-repeat';
+    element.style.setProperty('background-size', 'contain');
+    element.style.setProperty('background-position', 'center');
+    element.style.setProperty('background-repeat', 'no-repeat');
     return element;
   }
-
 
   /**
    * a flat list of all tags, associated with their DOM elements
