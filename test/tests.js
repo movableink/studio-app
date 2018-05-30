@@ -327,30 +327,45 @@ QUnit.test('container', function(assert) {
   );
 });
 
-QUnit.test('.cropImage crops images', function(assert) {
-  const app = new StudioApp();
-  const tag = app.tags[0];
-  const img = new Image();
-  img.src = 'http://example.com/image-tag.png';
-  tag.element.appendChild(img);
+QUnit.test('formatImageTags', function(assert) {
+  const container = document.createElement('body');
+  const miAttributes = document.querySelector('.mi-attributes');
 
-  app.cropImage(tag.element)
+  const tags = JSON.stringify([
+    { id: 'image', type: 'image', isCropped: false },
+    { id: 'croppedImage', type: 'image', isCropped: true },
+    { id: 'banana', type: 'banana' },
+  ]);
 
-  assert.equal(tag.element.style.backgroundSize, 'unset');
-  assert.equal(tag.element.style.backgroundPosition, 'unset');
-  assert.equal(tag.element.style.backgroundRepeat, 'no-repeat');
+  const html = `
+    <div mi-tag='image'><img></div>
+    <div mi-tag='croppedImage'><img></div>
+    <div mi-tag='banana'></div>
+  `;
+
+  container.innerHTML = html;
+  miAttributes.innerHTML = tags;
+
+  const app = new StudioApp({ container });
+  app.formatImageTags();
+
+  assert.equal(
+    container.querySelector('[mi-tag="image"] img').style.getPropertyValue('max-width'),
+    '100%'
+  );
+
+  assert.equal(
+    container.querySelector('[mi-tag="image"] img').style.getPropertyValue('max-height'),
+    '100%'
+  );
+
+  assert.equal(
+    container.querySelector('[mi-tag="croppedImage"] img').style.getPropertyValue('width'),
+    'auto'
+  );
+
+  assert.equal(
+    container.querySelector('[mi-tag="croppedImage"] img').style.getPropertyValue('height'),
+    'auto'
+  );
 });
-
-QUnit.test('.containImage shrinks images to fit', function(assert) {
-  const app = new StudioApp();
-  const tag = app.tags[0];
-  const img = new Image();
-  img.src = 'http://example.com/image-tag.png';
-  tag.element.appendChild(img);
-
-  app.containImage(tag.element)
-
-  assert.equal(tag.element.style.backgroundSize, 'contain');
-  assert.equal(tag.element.style.backgroundPosition, 'center center');
-  assert.equal(tag.element.style.backgroundRepeat, 'no-repeat');
-})

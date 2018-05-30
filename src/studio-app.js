@@ -1,4 +1,5 @@
 import CD from 'cropduster';
+import { cropImageElement, containImageElement } from './dom-utils/format-image';
 
 export default class StudioApp {
   /**
@@ -198,18 +199,13 @@ export default class StudioApp {
     return imageUrls;
   }
 
-  cropImage(element) {
-    element.style.setProperty('background-size', 'unset');
-    element.style.setProperty('background-position', 'unset');
-    element.style.setProperty('background-repeat', 'no-repeat');
-    return element;
-  }
-
-  containImage(element) {
-    element.style.setProperty('background-size', 'contain');
-    element.style.setProperty('background-position', 'center');
-    element.style.setProperty('background-repeat', 'no-repeat');
-    return element;
+  formatImageTags() {
+    return this.allTags
+      .filter(({ type }) => type === 'image')
+      .forEach(
+        ({ isCropped, element }) =>
+          isCropped ? cropImageElement(element) : containImageElement(element)
+      );
   }
 
   /**
