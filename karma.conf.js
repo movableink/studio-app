@@ -17,7 +17,7 @@ module.exports = function(config) {
 
     preprocessors: {
       'test/index.html': ['html2js'],
-      'src/*.js': ['rollup'],
+      'src/**/*.js': ['rollup'],
       'test/*.js': ['rollup', 'sourcemap']
     },
 
