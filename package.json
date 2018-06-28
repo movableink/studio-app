@@ -1,6 +1,6 @@
 {
   "name": "studio-app",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "Base class for building Studio-based Movable Ink applications",
   "keywords": [
     "movableink",
