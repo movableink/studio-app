@@ -2,9 +2,10 @@ import CD from 'cropduster';
 import environment from './environment';
 
 const hosts = {
-  development: '',
+  development: 'http://localhost:9292',
   staging: 'https://sorcerer-staging.movableink-templates.com',
-  production: 'https://sorcerer.movableink-templates.com'
+  production: 'https://sorcerer.movableink-templates.com',
+  mdk: '' // path only
 };
 
 const sorcererUrlBase = `${hosts[environment]}/data_sources/`;
@@ -21,9 +22,7 @@ class DataSource {
   }
 
   getRawData(params) {
-    const url = [sorcererUrlBase, this.key, '?', toParamString(params)].join(
-      ''
-    );
+    const url = [sorcererUrlBase, this.key, '?', toParamString(params)].join('');
 
     return CD.get(url);
   }
